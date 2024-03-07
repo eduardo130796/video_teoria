@@ -74,8 +74,6 @@ def streamlit_app():
                     slide_audio_paths = [audio_paths[audio] for audio in audio_paths if re.match(audio_pattern, audio)]
 
                     audio_clips = [AudioFileClip(audio) for audio in slide_audio_paths]
-                    video_clips.append(create_slide(slide_path, slide_audio_paths, 0.5, 0.5))
-
                     # Fechar clipes de áudio após uso
                     for audio_clip in audio_clips:
                         audio_clip.close()
@@ -99,6 +97,7 @@ def streamlit_app():
                 transition_duration = 0.5  # Duração da transição crossfade
 
                 # Adicionar transições de crossfade
+                final_clips = [video_clips[0]]
                 for clip in video_clips[1:]:
                     clip = clip.crossfadein(transition_duration)
                     final_clips.append(clip)
