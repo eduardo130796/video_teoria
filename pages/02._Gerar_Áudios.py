@@ -117,33 +117,28 @@ def streamlit_app():
                             current_slide = int(text.split(': ')[1])
                             file_count = 0
                         elif text and text != '.':
-                            file_count += 1
                             partes = dividir_texto(text, 200, '.')
                             for parte in partes:
-                                    if parte.strip() and parte.strip() != '.':
-                                        arquivo_audio = f"{audio_dir}/{current_slide}.{file_count}_narracao_slide.mp3"
-                                        if os.path.exists(arquivo_audio):
-                                            st.audio(arquivo_audio, format="audio/mp3")
-                                            st.write(f"O arquivo {arquivo_audio} já existe na pasta.")
-                                        else:
-                                            audio = generate(
-                                                text=parte,
-                                                voice=Voice(
-                                                    voice_id=voice_id,
-                                                    settings=VoiceSettings(stability=1.0, similarity_boost=0.70, style=0.0, use_speaker_boost=True)
-                                                ),
-                                                model="eleven_multilingual_v2"
-                                            )
-                                            with open(arquivo_audio, 'wb') as file:
-                                                file.write(audio)
-                                            st.audio(arquivo_audio, format="audio/mp3")
-                                            st.success(f"Texto criado para Slide {current_slide}, Parte {file_count}:\n\n{parte}")
-                                        if not parte:
-                                            st.warning(f"Não foi possível processar o texto: {parte}. Não há conteúdo suficiente.")
+                                file_count += 1
+                                if parte.strip() and parte.strip() != '.':
+                                    arquivo_audio = f"{audio_dir}/{current_slide}.{file_count}_narracao_slide.mp3"
+                                    if not os.path.exists(arquivo_audio):
+                                        audio = generate(
+                                            text=parte,
+                                            voice=Voice(
+                                                voice_id=voice_id,
+                                                settings=VoiceSettings(stability=1.0, similarity_boost=0.70, style=0.0, use_speaker_boost=True)
+                                            ),
+                                            model="eleven_multilingual_v2"
+                                        )
+                                        with open(arquivo_audio, 'wb') as file:
+                                            file.write(audio)
+                                        st.audio(arquivo_audio, format="audio/mp3")
+                                        st.success(f"Texto criado para Slide {current_slide}, Parte {file_count}:\n\n{parte}")
             
                 st.success("Todos os arquivos de áudio foram gerados com sucesso")
-                
-        
+
+       
         except RateLimitError as e:
             st.error("Os créditos da API acabaram. É necessário trocar de conta ou aguardar a renovação dos créditos para continuar.")
 
@@ -151,3 +146,4 @@ def streamlit_app():
 
 if __name__ == "__main__":
     streamlit_app()
+
