@@ -87,9 +87,7 @@ def streamlit_app():
                         slide_path = os.path.join(persistent_dir, img.name)
                         image.save(slide_path)
 
-                    slide_audio_pattern = rf'^{i+1}\.[0-9]+_narracao_slide\.mp3$'
-                    slide_audio_paths = [audio_paths[name] for name in audio_paths if re.search(slide_audio_pattern, name)]
-
+                    slide_audio_paths = [path for name, path in audio_paths.items() if re.search(rf'{i+1}\.[0-9]+_narracao_slide\.mp3', name)]
                     video_clips.append(create_slide(slide_path, slide_audio_paths, 0.3, 0.3))
 
                     elapsed_time = time.time() - start_time
