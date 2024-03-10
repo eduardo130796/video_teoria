@@ -87,10 +87,13 @@ def streamlit_app():
                         slide_path = os.path.join(persistent_dir, img.name)
                         image.save(slide_path)
 
-                    # Ordena os arquivos de áudio com base no padrão de numeração
                     slide_audio_pattern = rf'^{i+1}\.[0-9]+_narracao_slide\.mp3$'
-                    slide_audio_paths = [audio_paths[name] for name in sorted(audio_paths, key=lambda x: float(re.findall(rf'^{i+1}\.([0-9]+)_narracao_slide\.mp3$', x)[0])) if re.match(slide_audio_pattern, name)]
-
+                    matched_audios = [name for name in audio_paths if re.match(slide_audio_pattern, name)]
+    
+                    # Verifica se a correspondência foi encontrada antes de tentar acessar o elemento
+                    sorted_audios = sorted(matched_audios, key=lambda x: int(re.findall(rf'^{i+1}\.([0-9]+)_narracao_slide\.mp3$', x)[0]) if re.findall(rf'^{i+1}\.([0-9]+)_narracao_slide\.mp3$', x) else 0)
+    
+                    slide_audio_paths = [audio_paths[name] for name in sorted_audios]
                     video_clips.append(create_slide(slide_path, slide_audio_paths, 0.3, 0.3))
 
                     elapsed_time = time.time() - start_time
