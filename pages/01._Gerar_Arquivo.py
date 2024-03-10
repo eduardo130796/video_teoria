@@ -156,7 +156,7 @@ with tab2:
         if assunto:
             titulo_assunto = f"Questões Comentadas sobre {assunto}"
             p = doc.add_paragraph()
-            run = p.add_run(titulo_assunto)
+            run = p.add_run(f"SLIDE: {slide_numero}\n" + titulo_assunto)
             run.bold = True
             run.font.size = Pt(16)
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
