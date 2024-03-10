@@ -88,7 +88,7 @@ def streamlit_app():
                         image.save(slide_path)
 
                     slide_audio_pattern = rf'^{i+1}\.[0-9]+_narracao_slide\.mp3$'
-                    slide_audio_paths = [audio_paths[name] for name in audio_paths if re.match(slide_audio_pattern, name)]
+                    slide_audio_paths = [audio_paths[name] for name in audio_paths if re.search(slide_audio_pattern, name)]
 
                     video_clips.append(create_slide(slide_path, slide_audio_paths, 0.3, 0.3))
 
