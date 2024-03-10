@@ -88,7 +88,7 @@ def streamlit_app():
                         image.save(slide_path)
 
                     slide_audio_pattern = rf'^{i+1}\.[0-9]+_narracao_slide\.mp3'
-                    matched_audios = [name for name in audio_paths if re.match(slide_audio_pattern, name)]
+                    matched_audios = [name for name in audio_paths if re.search(slide_audio_pattern, name)]
     
                     # Verifica se a correspondência foi encontrada antes de tentar acessar o elemento
                     sorted_audios = sorted(matched_audios, key=lambda x: int(re.findall(rf'^{i+1}\.([0-9]+)_narracao_slide\.mp3$', x)[0]) if re.findall(rf'^{i+1}\.([0-9]+)_narracao_slide\.mp3$', x) else 0)
