@@ -66,6 +66,9 @@ def streamlit_app():
     if not os.path.exists(persistent_dir):
         os.makedirs(persistent_dir)
 
+    # Permitir que o usuário especifique de qual slide começar
+    slide_inicial = st.number_input("Número do primeiro slide", min_value=1, value=1)
+
     if st.button("Criar Vídeo"):
         if uploaded_images and uploaded_audios:
             with st.spinner("Gerando vídeo..."):
@@ -82,18 +85,22 @@ def streamlit_app():
 
                 video_clips = []
                 total_steps = len(uploaded_images)
-                for i, img in enumerate(uploaded_images):
+                for i, img in enumerate(uploaded_images, start=slide_inicial):
                     with Image.open(io.BytesIO(img.getvalue())) as image:
                         slide_path = os.path.join(persistent_dir, img.name)
                         image.save(slide_path)
+                        print(i)
 
-                    slide_audio_paths = [path for name, path in audio_paths.items() if re.search(rf'{i+1}\.[0-9]+_narracao_slide\.mp3', name)]
+                    slide_audio_paths = [path for name, path in audio_paths.items() if re.match(rf'{i}\.[0-9]+_narracao_slide\.mp3', name)]
                     video_clips.append(create_slide(slide_path, slide_audio_paths, 0.3, 0.3))
 
+                    # Cálculo do progresso atualizado
+                    current_step = i - slide_inicial + 1
                     elapsed_time = time.time() - start_time
-                    progress = (i + 1) / total_steps
+                    progress = current_step / total_steps
+                    progress = min(max(progress, 0.0), 1.0)  # Garantir que o progresso esteja entre 0.0 e 1.0
                     progress_bar.progress(progress)
-                    status_text.text(f"Processing Slide {i+1}/{len(uploaded_images)} ({elapsed_time:.2f}s)")
+                    status_text.text(f"Processing Slide {i}/{len(uploaded_images)} ({elapsed_time:.2f}s)")
 
                 # Atualiza o status com o tempo decorrido
                 elapsed_time = time.time() - start_time
@@ -135,3 +142,4 @@ def streamlit_app():
 
 if __name__ == "__main__":
     streamlit_app()
+
