@@ -87,7 +87,7 @@ def streamlit_app():
                         slide_path = os.path.join(persistent_dir, img.name)
                         image.save(slide_path)
 
-                    slide_audio_pattern = rf'^{i+1}\.[0-9]+_narracao_slide\.mp3$'
+                    slide_audio_pattern = rf'^{i+1}\.[0-9]+_narracao_slide\.mp3'
                     matched_audios = [name for name in audio_paths if re.match(slide_audio_pattern, name)]
     
                     # Verifica se a correspondência foi encontrada antes de tentar acessar o elemento
