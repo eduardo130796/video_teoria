@@ -153,6 +153,15 @@ with tab2:
         numero_da_questao = 1
         questoes_obtidas = []
 
+        if assunto:
+            titulo_assunto = f"Questões Comentadas sobre {assunto}"
+            p = doc.add_paragraph()
+            run = p.add_run(titulo_assunto)
+            run.bold = True
+            run.font.size = Pt(16)
+            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            slide_numero += 1  # Incrementa o número do slide
+
         try:
             cnx = mysql.connector.connect(**config)
             cursor = cnx.cursor()
